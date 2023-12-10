@@ -5,7 +5,7 @@ import Peer from 'simple-peer';
 const SocketContext = createContext();
 
 // const socket = io('http://localhost:5000/');
-const socket = io('https://videotradedev.ru');
+// const socket = io('https://videotradedev.ru');
 // const socket = io('https://warm-wildwood-81069.herokuapp.com');
 
 const ContextProvider = ({ children }) => {
@@ -15,6 +15,13 @@ const ContextProvider = ({ children }) => {
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
   const [me, setMe] = useState('');
+  const [callerId] = useState(Math.floor(10 + Math.random() * 90).toString());
+
+  const socket = SocketIOClient('https://videotradedev.ru', {
+    query: {
+      callerId,
+    },
+  });
 
   const myVideo = useRef();
   const userVideo = useRef();
@@ -29,7 +36,8 @@ const ContextProvider = ({ children }) => {
         myVideo.current.srcObject = currentStream;
       });
 
-    socket.on('me', id => setMe(id));
+    // socket.on('me', id => setMe(id));
+    setMe(callerId);
 
     socket.on('callUser', ({ from, name: callerName, signal }) => {
       console.log('fafafaada');
