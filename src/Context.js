@@ -17,7 +17,7 @@ const ContextProvider = ({ children }) => {
   const [me, setMe] = useState('');
   const [callerId] = useState(Math.floor(10 + Math.random() * 90).toString());
 
-  const socket = SocketIOClient('https://videotradedev.ru', {
+  const socket = io('https://videotradedev.ru', {
     query: {
       callerId,
     },
@@ -37,6 +37,9 @@ const ContextProvider = ({ children }) => {
       });
 
     // socket.on('me', id => setMe(id));
+
+    socket.emit('joinUser');
+
     setMe(callerId);
 
     socket.on('callUser', ({ from, name: callerName, signal }) => {
